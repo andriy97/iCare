@@ -1,0 +1,2 @@
+rootProject.name='iCare2'
+include ':app'
