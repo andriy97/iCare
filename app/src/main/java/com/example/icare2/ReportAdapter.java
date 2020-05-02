@@ -40,11 +40,16 @@ public class ReportAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
         convertView= inflater.inflate(R.layout.customlayout, null);
-        TextView textViewData = convertView.findViewById(R.id.cazzotroia);
-        TextView textViewData1 = convertView.findViewById(R.id.temp);
+        TextView giorno = convertView.findViewById(R.id.giorno);
+        TextView temperatura = convertView.findViewById(R.id.temp);
+        TextView pressione = convertView.findViewById(R.id.pressione);
+        TextView peso = convertView.findViewById(R.id.peso);
+
         Report selectedReport= report.get(position);
-        textViewData.setText("giorno: "+selectedReport.getGiorno());
-        textViewData1.setText("anno: "+selectedReport.getAnno());
+        giorno.setText("giorno: "+selectedReport.getGiorno());
+        temperatura.setText("temperatura: "+selectedReport.getTemperatura());
+        pressione.setText("pressione: "+selectedReport.getPressione());
+        peso.setText("peso: "+selectedReport.getPeso());
 
 
         return convertView;
@@ -53,6 +58,12 @@ public class ReportAdapter extends BaseAdapter {
     //elimina elemento da listview
     public void removeElementFromList(int index) {
         report.remove(index);
+        this.notifyDataSetChanged();
+    }
+
+    public void updateList(List<Report> newlist) {
+        report.clear();
+        report.addAll(newlist);
         this.notifyDataSetChanged();
     }
 }

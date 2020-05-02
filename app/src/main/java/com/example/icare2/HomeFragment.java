@@ -31,13 +31,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener { //a
         //collego i buttons a quelli nel file xml
         newReport=view.findViewById(R.id.newreportbutton);
         modifyReport = view.findViewById(R.id.modifybutton);
-        deleteReport = view.findViewById(R.id.modifybutton);
 
         //anziché scrivere per ogni button la funzione onClick, ne creo una con uno switch,
         // perciò setOnclickListener prende this come parametro
         newReport.setOnClickListener(this);
         modifyReport.setOnClickListener(this);
-        deleteReport.setOnClickListener(this);
 
         return view;
     }
@@ -53,6 +51,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener { //a
             case R.id.modifybutton:
                 MainActivity.fragmentManager.beginTransaction().replace(R.id.fragment_container, new ModifyReportFragment()).
                         addToBackStack(null).commit();
+                break;
         }
     }
 }

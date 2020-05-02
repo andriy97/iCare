@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -15,10 +16,13 @@ public interface MyDao { //metodi per manipolare il database
     public void addReport(Report report);
 
     //query per leggere il contenuto del database
-    @Query("select * from Reports")
+    @Query("select * from Reports order by giorno DESC")
     public List<Report> getReports();
 
     //eliminare report dal database
     @Delete
     public void deleteReport(Report report);
+
+    @Update
+    public void updateReport(Report report);
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,8 +18,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -98,22 +103,66 @@ public class ModifyReportFragment extends Fragment{
             }
         });
 
-        //reazione al click corto
+        //reazione al click corto (modifica report)
         listViewReport.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                //creo alertdialog
+                final AlertDialog.Builder alertbuilder = new AlertDialog.Builder(getContext());
+                View alertview=getLayoutInflater().inflate(R.layout.customalert, null);
+                final EditText Temperatura= alertview.findViewById(R.id.Temperatura);
+                final EditText Pressione= alertview.findViewById(R.id.Pressione);
+                final EditText Peso= alertview.findViewById(R.id.Peso);
+                Button modifica = alertview.findViewById(R.id.modifyalert);
+                Button annulla = alertview.findViewById(R.id.cancelalert);
 
-                //reports.remove(position);
+                //setto i suoi campi con i valori del report cliccato
+                Temperatura.setText(""+reports.get(position).getTemperatura());
+                Pressione.setText(""+reports.get(position).getPressione());
+                Peso.setText(""+reports.get(position).getPeso());
 
 
+                alertbuilder.setView(alertview);
+                final AlertDialog dialog= alertbuilder.create();
+
+                //clicco modifica
+                modifica.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        //creo oggetto temporaneo con i dati modificati
+                        Report reportTempo=new Report();
+                        reportTempo.setId(reports.get(position).getId());
+                        reportTempo.setTemperatura((Double.parseDouble(Temperatura.getText().toString())));
+                        reportTempo.setPressione((Double.parseDouble(Pressione.getText().toString())));
+                        reportTempo.setPeso((Double.parseDouble(Peso.getText().toString())));
+                        reportTempo.setGiorno(reports.get(position).getGiorno());
 
 
-                //Log.d("clicked","id: " + mioid);
+                        //aggiorno database
+                        MainActivity.MyDatabase.myDao().updateReport(reportTempo);
+                        //aggiorno listview
+                        reports = MainActivity.MyDatabase.myDao().getReports();
+                        reportAdapter.updateList(reports);
+                        dialog.dismiss();
+                    }
+                });
 
+                //clicco annulla
+                annulla.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+
+                    }
+                });
+
+                dialog.show();
             }
         });
         return view;
 
     }
+
 
 }

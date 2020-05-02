@@ -1,10 +1,19 @@
 package com.example.icare2;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.room.Room;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -12,7 +21,31 @@ public class MainActivity extends AppCompatActivity {
     public static MyDatabase MyDatabase; //creo l'istanza del database
 
     @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.priority:
+                MainActivity.fragmentManager.beginTransaction().replace(R.id.fragment_container, new PriorityFragment()).
+                        addToBackStack(null).commit(); //aggiungo al backstack
+        }
+        switch (item.getItemId()){
+            case R.id.notifications:
+                MainActivity.fragmentManager.beginTransaction().replace(R.id.fragment_container, new NotificationsFragment()).
+                        addToBackStack(null).commit(); //aggiungo al backstack
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    //menu toolbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.settings_menu, menu);
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         fragmentManager = getSupportFragmentManager();
@@ -26,5 +59,7 @@ public class MainActivity extends AppCompatActivity {
             }
             fragmentManager.beginTransaction().add(R.id.fragment_container, new HomeFragment()).commit(); //aggiungo il fragment HomeFragment al container
         }
+
     }
+
 }

@@ -2,9 +2,11 @@ package com.example.icare2;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import android.text.InputType;
@@ -19,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -39,6 +42,7 @@ public class AddReportFragment extends Fragment {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -47,7 +51,6 @@ public class AddReportFragment extends Fragment {
 
         campilistView= view.findViewById(R.id.campiList);
         calendario=view.findViewById(R.id.calendario);
-
 
 
         //creo i campi che saranno messi nella listview
@@ -75,7 +78,6 @@ public class AddReportFragment extends Fragment {
         campilistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-
 
 
                 //creo finestra di dialogo per inserire il dato
@@ -116,20 +118,25 @@ public class AddReportFragment extends Fragment {
                 double temperatura_= listadicampi.get(1).getValore();
                 int id_ = (int)(temperatura_+pressione_)+rand.nextInt(100000);
 
+                if(anno!=0) {
 
-                //creo l'oggetto Report passandogli i dati presi in input da utente
-                Report report = new Report();
-                report.setId(id_);
-                report.setAnno(anno);
-                report.setMese(mese);
-                report.setGiorno(giorno);
-                report.setPressione(pressione_);
-                report.setTemperatura(temperatura_);
+                    //creo l'oggetto Report passandogli i dati presi in input da utente
+                    Report report = new Report();
+                    report.setId(id_);
+                    report.setAnno(anno);
+                    report.setMese(mese);
+                    report.setGiorno(giorno);
+                    report.setPressione(pressione_);
+                    report.setTemperatura(temperatura_);
 
-                MainActivity.MyDatabase.myDao().addReport(report); //aggiungo il report al database
-                Toast.makeText(getActivity(), "Report aggiunto", Toast.LENGTH_SHORT).show();
+                    MainActivity.MyDatabase.myDao().addReport(report); //aggiungo il report al database
+                    Toast.makeText(getActivity(), "Report aggiunto", Toast.LENGTH_SHORT).show();
+                    //ritorno alla home
+                    MainActivity.fragmentManager.beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
 
-
+                }else{
+                    //Todo: prendere data di oggi
+                }
 
             }
         });
