@@ -21,17 +21,7 @@ public class PriorityFragment extends Fragment   {
             // Inflate the layout for this fragment
             View view = inflater.inflate(R.layout.fragment_priority_, container, false);
 
-            Calendar c =Calendar.getInstance();
-            int ora=c.get(Calendar.HOUR_OF_DAY);
-            int minuti=c.get(Calendar.MINUTE);
 
-            TimePickerDialog timedialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
-                @Override
-                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-
-                }
-            }, ora, minuti, true);
-            timedialog.show();
 
             return view;
         }

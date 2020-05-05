@@ -6,9 +6,17 @@
     tools:context=".NotificationsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Scegli l'orario in cui preferisci compilare il report"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="51dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

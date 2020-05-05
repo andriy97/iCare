@@ -12,11 +12,7 @@ public class Report {
     @PrimaryKey
     private int id;
     @ColumnInfo
-    private int anno;
-    @ColumnInfo
-    private int mese;
-    @ColumnInfo
-    private int giorno;
+    private String data;
     @ColumnInfo
     private double temperatura;
     @ColumnInfo
@@ -34,28 +30,12 @@ public class Report {
         this.id = id;
     }
 
-    public int getAnno() {
-        return anno;
+    public String getData() {
+        return data;
     }
 
-    public void setAnno(int anno) {
-        this.anno = anno;
-    }
-
-    public int getMese() {
-        return mese;
-    }
-
-    public void setMese(int mese) {
-        this.mese = mese;
-    }
-
-    public int getGiorno() {
-        return giorno;
-    }
-
-    public void setGiorno(int giorno) {
-        this.giorno = giorno;
+    public void setData(String data) {
+        this.data = data;
     }
 
     public double getTemperatura() {

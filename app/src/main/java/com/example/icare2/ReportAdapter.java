@@ -46,7 +46,7 @@ public class ReportAdapter extends BaseAdapter {
         TextView peso = convertView.findViewById(R.id.peso);
 
         Report selectedReport= report.get(position);
-        giorno.setText("giorno: "+selectedReport.getGiorno());
+        giorno.setText("data: "+selectedReport.getData());
         temperatura.setText("temperatura: "+selectedReport.getTemperatura());
         pressione.setText("pressione: "+selectedReport.getPressione());
         peso.setText("peso: "+selectedReport.getPeso());

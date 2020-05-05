@@ -136,7 +136,7 @@ public class ModifyReportFragment extends Fragment{
                         reportTempo.setTemperatura((Double.parseDouble(Temperatura.getText().toString())));
                         reportTempo.setPressione((Double.parseDouble(Pressione.getText().toString())));
                         reportTempo.setPeso((Double.parseDouble(Peso.getText().toString())));
-                        reportTempo.setGiorno(reports.get(position).getGiorno());
+                        reportTempo.setData(reports.get(position).getData());
 
 
                         //aggiorno database

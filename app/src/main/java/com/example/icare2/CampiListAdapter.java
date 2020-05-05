@@ -44,8 +44,19 @@ public class CampiListAdapter extends BaseAdapter {
         TextView valore = convertView.findViewById(R.id.valorecampo);
         Campo selectedReport= campi.get(position);
         titolo.setText(selectedReport.getTitolo());
-        valore.setText("" + selectedReport.getValore());
-
+        //se è il tasto della data prendo il valore dalla stringa, altrimenti dal double
+        if(selectedReport.getTitolo()=="Data") {
+            valore.setText("" + selectedReport.getValoredata()); //stringa
+            if(selectedReport.getValoredata()==null){
+                valore.setText("clicca per aggiungere");
+            }
+        } else {
+            if(selectedReport.getValore()==0.0){
+                valore.setText("clicca per aggiungere");
+            }else{
+                valore.setText("" + selectedReport.getValore()); //double
+            }
+        }
 
         return convertView;
     }

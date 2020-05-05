@@ -4,6 +4,9 @@ public class Campo {
     private String titolo;
     private double valore;
 
+
+    private String valoredata;
+
     public Campo(String titolo, double valore) {
         this.titolo = titolo;
         this.valore = valore;
@@ -11,7 +14,14 @@ public class Campo {
 
     public Campo(String titolo) {
         this.titolo = titolo;
-        this.valore = valore;
+    }
+
+    public String getValoredata() {
+        return valoredata;
+    }
+
+    public void setValoredata(String valoredata) {
+        this.valoredata = valoredata;
     }
 
     public double getValore() {
