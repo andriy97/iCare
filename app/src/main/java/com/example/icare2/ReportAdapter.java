@@ -42,13 +42,13 @@ public class ReportAdapter extends BaseAdapter {
         convertView= inflater.inflate(R.layout.customlayout, null);
         TextView giorno = convertView.findViewById(R.id.giorno);
         TextView temperatura = convertView.findViewById(R.id.temp);
-        TextView pressione = convertView.findViewById(R.id.pressione);
+        TextView pressione = convertView.findViewById(R.id.battito);
         TextView peso = convertView.findViewById(R.id.peso);
 
         Report selectedReport= report.get(position);
         giorno.setText("data: "+selectedReport.getData());
         temperatura.setText("temperatura: "+selectedReport.getTemperatura());
-        pressione.setText("pressione: "+selectedReport.getPressione());
+        pressione.setText("bpm: "+selectedReport.getFrequenza());
         peso.setText("peso: "+selectedReport.getPeso());
 
 

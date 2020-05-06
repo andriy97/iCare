@@ -9,14 +9,14 @@ import androidx.room.PrimaryKey;
 public class Report {
 
     //Colonne
-    @PrimaryKey
+    @PrimaryKey (autoGenerate = true)
     private int id;
     @ColumnInfo
     private String data;
     @ColumnInfo
     private double temperatura;
     @ColumnInfo
-    private double pressione;
+    private double frequenza;
     @ColumnInfo
     private double peso;
 
@@ -46,12 +46,12 @@ public class Report {
         this.temperatura = temperatura;
     }
 
-    public double getPressione() {
-        return pressione;
+    public double getFrequenza() {
+        return frequenza;
     }
 
-    public void setPressione(double pressione) {
-        this.pressione = pressione;
+    public void setFrequenza(double frequenza) {
+        this.frequenza = frequenza;
     }
 
     public double getPeso() {

@@ -11,5 +11,11 @@
 
     </item>
 
+    <item android:id="@+id/graphs"
+        android:title="Grafici">
+
+    </item>
+
+
 
 </menu>

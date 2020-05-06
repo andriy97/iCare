@@ -9,6 +9,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +23,7 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
+
     public static FragmentManager fragmentManager;
     public static MyDatabase MyDatabase; //creo l'istanza del database
 
@@ -31,8 +33,12 @@ public class MainActivity extends AppCompatActivity {
             case R.id.priority:
                 MainActivity.fragmentManager.beginTransaction().replace(R.id.fragment_container, new PriorityFragment()).
                         addToBackStack(null).commit(); //aggiungo al backstack
-        }
-        switch (item.getItemId()){
+                break;
+            case R.id.graphs:
+                MainActivity.fragmentManager.beginTransaction().replace(R.id.fragment_container, new GraphsFragment()).
+                        addToBackStack(null).commit(); //aggiungo al backstack
+                break;
+
             case R.id.notifications:
                 Calendar c =Calendar.getInstance();
                 int ora=c.get(Calendar.HOUR_OF_DAY);
@@ -55,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }, ora, minuti, true);
                 timedialog.show();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

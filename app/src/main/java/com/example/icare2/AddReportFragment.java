@@ -14,7 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import android.text.InputFilter;
 import android.text.InputType;
+import android.text.method.DigitsKeyListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,9 +63,9 @@ public class AddReportFragment extends Fragment {
 
         //creo i campi che saranno messi nella listview
         Campo Data = new Campo("Data");
-        Campo Temperatura = new Campo("Temperatura");
-        Campo Pressione = new Campo("Pressione");
-        Campo Peso = new Campo("Peso");
+        Campo Temperatura = new Campo("Temperatura (C°)");
+        Campo Pressione = new Campo("Frequenza Cardiaca (bpm)");
+        Campo Peso = new Campo("Peso (Kg)");
 
         final List<Campo> listadicampi= new ArrayList<>();
         listadicampi.add(Data);
@@ -106,14 +108,17 @@ public class AddReportFragment extends Fragment {
                 }else{
 
                     //creo finestra di dialogo per inserire il dato
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_DeviceDefaul);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Light_Dialog);
                     builder.setTitle(listadicampi.get(position).getTitolo());
                     final EditText input = new EditText(getContext());
                     input.setInputType(InputType.TYPE_CLASS_PHONE);
+                    input.setKeyListener(DigitsKeyListener.getInstance(true,true)); //no spazi, solo un punto
+                    input.setFilters(new InputFilter[] { new InputFilter.LengthFilter(4) }); //max numero di caratteri
                     builder.setView(input);
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+
                             valoreInserito = Double.parseDouble(input.getText().toString());
                             listadicampi.get(position).setValore(valoreInserito);
                             campilistView.setAdapter(campiListAdapter); //aggiorno la listview con il valore inserito
@@ -145,16 +150,12 @@ public class AddReportFragment extends Fragment {
                 Double temperatura_= listadicampi.get(1).getValore();
                 Double pressione_= listadicampi.get(2).getValore();
                 Double peso_=listadicampi.get(3).getValore();
-                Toast.makeText(getContext(), ""+pressione_ +" e "+temperatura_, Toast.LENGTH_SHORT).show();
-                int id_ = (int)(temperatura_+pressione_)+rand.nextInt(100000);
-
 
 
                     //creo l'oggetto Report passandogli i dati presi in input da utente
                     Report report = new Report();
-                    report.setId(id_);
                     report.setData(data);
-                    report.setPressione(pressione_);
+                    report.setFrequenza(pressione_);
                     report.setTemperatura(temperatura_);
                     report.setPeso(peso_);
 
