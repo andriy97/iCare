@@ -1,14 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GraphsFragment">
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent">
 
-    <com.github.mikephil.charting.charts.LineChart
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:id="@+id/grafico1">
+        android:layout_height="match_parent">
 
-    </com.github.mikephil.charting.charts.LineChart>
-</FrameLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <TextView
+                android:id="@+id/titoloGrafico1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Temperatura"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.503"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/graficotemp"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="50dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titoloGrafico1" />
+
+            <TextView
+                android:id="@+id/titoloGrafico2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Frequenza Cardiaca"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/graficotemp" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/graficofreq"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="50dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titoloGrafico2" />
+
+            <TextView
+                android:id="@+id/titoloGrafico3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="90dp"
+                android:text="Peso Corporeo"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/graficofreq" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/graficopeso"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="50dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titoloGrafico3" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </RelativeLayout>
+
+
+</ScrollView>
+
+
+

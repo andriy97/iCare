@@ -9,13 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment implements View.OnClickListener { //aggiungo implements view.Onclicklistener
     //Tasti per fare le tre azioni principali
-    private Button newReport, modifyReport, deleteReport;
+    private Button modifyReport, deleteReport;
+    private FloatingActionButton newReport;
 
     public HomeFragment() {
         // Required empty public constructor

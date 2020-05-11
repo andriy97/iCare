@@ -17,7 +17,11 @@ public interface MyDao { //metodi per manipolare il database
 
     //query per leggere il contenuto del database
     @Query("select * from Reports order by data DESC")
-    public List<Report> getReports();
+    public List<Report> getReportsDesc();
+
+    @Query("select * from Reports order by data ASC")
+    public List<Report> getReportsAsc();
+
 
     //eliminare report dal database
     @Delete

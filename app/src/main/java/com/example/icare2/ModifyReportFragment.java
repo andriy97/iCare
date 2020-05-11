@@ -41,7 +41,7 @@ public class ModifyReportFragment extends Fragment{
         listViewReport = view.findViewById(R.id.reportlist);
 
         //salvo tutti i report del database in una lista
-        reports = MainActivity.MyDatabase.myDao().getReports();
+        reports = MainActivity.MyDatabase.myDao().getReportsDesc();
 
         //popolo la listview
         final ReportAdapter reportAdapter = new ReportAdapter(getContext(), reports);
@@ -124,7 +124,7 @@ public class ModifyReportFragment extends Fragment{
                         //aggiorno database
                         MainActivity.MyDatabase.myDao().updateReport(reportTempo);
                         //aggiorno listview
-                        reports = MainActivity.MyDatabase.myDao().getReports();
+                        reports = MainActivity.MyDatabase.myDao().getReportsDesc();
                         reportAdapter.updateList(reports);
                         dialog.dismiss();
                     }
