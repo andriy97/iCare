@@ -42,7 +42,6 @@ import java.util.Random;
  */
 public class AddReportFragment extends Fragment {
     private ListView campilistView;
-    private CalendarView calendario;
     String data;
     private Button addButton;
     double valoreInserito;
@@ -118,10 +117,13 @@ public class AddReportFragment extends Fragment {
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
-                            valoreInserito = Double.parseDouble(input.getText().toString());
-                            listadicampi.get(position).setValore(valoreInserito);
-                            campilistView.setAdapter(campiListAdapter); //aggiorno la listview con il valore inserito
+                            try {
+                                valoreInserito = Double.parseDouble(input.getText().toString());
+                                listadicampi.get(position).setValore(valoreInserito);
+                                campilistView.setAdapter(campiListAdapter); //aggiorno la listview con il valore inserito
+                            }catch (Exception e){
+                                Toast.makeText(getContext(), "Inserisci un valore valido", Toast.LENGTH_SHORT).show();
+                            }
 
 
 
@@ -145,25 +147,28 @@ public class AddReportFragment extends Fragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Random rand = new Random();
+               if(listadicampi.get(0).getValoredata()==null || listadicampi.get(1).getValore()==0.0 || listadicampi.get(2).getValore()==0.0 || listadicampi.get(3).getValore()==0.0){
+                   Toast.makeText(getContext(), "Compila il report", Toast.LENGTH_SHORT).show();
+               }else {
 
-                Double temperatura_= listadicampi.get(1).getValore();
-                Double pressione_= listadicampi.get(2).getValore();
-                Double peso_=listadicampi.get(3).getValore();
+                   Double temperatura_ = listadicampi.get(1).getValore();
+                   Double pressione_ = listadicampi.get(2).getValore();
+                   Double peso_ = listadicampi.get(3).getValore();
 
 
-                    //creo l'oggetto Report passandogli i dati presi in input da utente
-                    Report report = new Report();
-                    report.setData(data);
-                    report.setFrequenza(pressione_);
-                    report.setTemperatura(temperatura_);
-                    report.setPeso(peso_);
+                   //creo l'oggetto Report passandogli i dati presi in input da utente
+                   Report report = new Report();
+                   report.setData(data);
+                   report.setFrequenza(pressione_);
+                   report.setTemperatura(temperatura_);
+                   report.setPeso(peso_);
 
-                    MainActivity.MyDatabase.myDao().addReport(report); //aggiungo il report al database
-                    Toast.makeText(getActivity(), "Report aggiunto", Toast.LENGTH_SHORT).show();
-                    //ritorno alla home
-                    MainActivity.fragmentManager.beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-
+                   MainActivity.MyDatabase.myDao().addReport(report); //aggiungo il report al database
+                   Toast.makeText(getActivity(), "Report aggiunto", Toast.LENGTH_SHORT).show();
+                   //ritorno alla home
+                  // MainActivity.fragmentManager.beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+                   MainActivity.fragmentManager.popBackStackImmediate();
+               }
             }
         });
         return view;

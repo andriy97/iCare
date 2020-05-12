@@ -16,10 +16,10 @@ public interface MyDao { //metodi per manipolare il database
     public void addReport(Report report);
 
     //query per leggere il contenuto del database
-    @Query("select * from Reports order by data DESC")
+    @Query("select id, data, AVG(temperatura), AVG(frequenza), AVG(peso) from Reports group by data order by data DESC")
     public List<Report> getReportsDesc();
 
-    @Query("select * from Reports order by data ASC")
+    @Query("select id, data, AVG(temperatura), AVG(frequenza), AVG(peso) from Reports group by data order by data ASC")
     public List<Report> getReportsAsc();
 
 

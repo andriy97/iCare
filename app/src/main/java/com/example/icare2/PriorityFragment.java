@@ -52,8 +52,8 @@ public class PriorityFragment extends Fragment   {
                 editor.putInt("peso", pesoPriority.getValue());
                 editor.commit();
                 Toast.makeText(getContext(), "Priorità salvate", Toast.LENGTH_SHORT).show();
-                MainActivity.fragmentManager.beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-
+                //MainActivity.fragmentManager.beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+                    MainActivity.fragmentManager.popBackStackImmediate();
                 }
             });
 

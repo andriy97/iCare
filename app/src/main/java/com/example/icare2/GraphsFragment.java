@@ -112,6 +112,7 @@ public class GraphsFragment extends Fragment {
 
         }
 
+        //creo grafico
 
         grafico.setDragEnabled(true);
         grafico.setScaleEnabled(false);
