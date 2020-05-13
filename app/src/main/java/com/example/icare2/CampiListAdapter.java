@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class CampiListAdapter extends BaseAdapter {
@@ -44,6 +45,8 @@ public class CampiListAdapter extends BaseAdapter {
         TextView valore = convertView.findViewById(R.id.valorecampo);
         Campo selectedReport= campi.get(position);
         titolo.setText(selectedReport.getTitolo());
+
+        DecimalFormat intero = new DecimalFormat("####0");//approssimo a intero
         //se è il tasto della data prendo il valore dalla stringa, altrimenti dal double
         if(selectedReport.getTitolo()=="Data") {
             valore.setText("" + selectedReport.getValoredata()); //stringa

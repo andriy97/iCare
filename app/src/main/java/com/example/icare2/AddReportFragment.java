@@ -44,7 +44,7 @@ public class AddReportFragment extends Fragment {
     private ListView campilistView;
     String data;
     private Button addButton;
-    double valoreInserito;
+    Double valoreInserito;
     String mese, giorno, anno;
     public AddReportFragment() {
         // Required empty public constructor

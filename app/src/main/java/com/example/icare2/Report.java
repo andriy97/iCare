@@ -4,6 +4,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import org.jetbrains.annotations.NotNull;
+
 //FUNGE DA TABELLA
 @Entity(tableName = "Reports")
 public class Report {
@@ -14,11 +16,13 @@ public class Report {
     @ColumnInfo
     private String data;
     @ColumnInfo
-    private double temperatura;
+    private Double temperatura;
     @ColumnInfo
-    private double frequenza;
+    private Double frequenza;
     @ColumnInfo
-    private double peso;
+    private Double peso;
+    @ColumnInfo
+    private int numero;
 
 
     //tutti i getter e setter
@@ -30,6 +34,14 @@ public class Report {
         this.id = id;
     }
 
+    public int getNumero() {
+        return numero;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
+    }
+
     public String getData() {
         return data;
     }
@@ -38,27 +50,27 @@ public class Report {
         this.data = data;
     }
 
-    public double getTemperatura() {
+    public Double getTemperatura() {
         return temperatura;
     }
 
-    public void setTemperatura(double temperatura) {
+    public void setTemperatura(Double temperatura) {
         this.temperatura = temperatura;
     }
 
-    public double getFrequenza() {
+    public Double getFrequenza() {
         return frequenza;
     }
 
-    public void setFrequenza(double frequenza) {
+    public void setFrequenza(Double frequenza) {
         this.frequenza = frequenza;
     }
 
-    public double getPeso() {
+    public Double getPeso() {
         return peso;
     }
 
-    public void setPeso(double peso) {
+    public void setPeso(Double peso) {
         this.peso = peso;
     }
 

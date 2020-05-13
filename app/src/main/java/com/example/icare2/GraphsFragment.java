@@ -13,17 +13,23 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
@@ -40,6 +46,8 @@ import java.util.Map;
 public class GraphsFragment extends Fragment {
 
     private LineChart graficotemp, graficofreq, graficopeso;
+    private BarChart graficoreport;
+    ArrayList<BarEntry> valoriYreport;
     ArrayList<Entry> valoriY;
     ArrayList<String> valoriX;
     XAxis xAxis;
@@ -63,14 +71,25 @@ public class GraphsFragment extends Fragment {
             sublistReport = reports;
         }
 
+        //valori x di tutti i grafici (data)
+        valoriX = new ArrayList<>();
+        for (Report rep : sublistReport) {
+
+            valoriX.add(rep.getData().split("-")[2] + "-" + rep.getData().split("-")[1]);
+        }
+
+
+        //grafici linechart
         graficotemp= view.findViewById(R.id.graficotemp);
         graficofreq= view.findViewById(R.id.graficofreq);
         graficopeso= view.findViewById(R.id.graficopeso);
-
         drawgraph(graficotemp, "Temperatura");
         drawgraph(graficofreq, "Frequenza");
-
         drawgraph(graficopeso, "Peso");
+
+        //grafico barchart
+        graficoreport=view.findViewById(R.id.graficoreport);
+        drawBarChart(graficoreport);
 
 
 
@@ -78,34 +97,37 @@ public class GraphsFragment extends Fragment {
 
         return view;
     }
-    public void drawgraph ( LineChart grafico, String titolo){
+    public void drawgraph (LineChart grafico, String titolo){
 
         switch (titolo){
             case "Temperatura":
                 valoriY = new ArrayList<>();
                 //valori y
                 for (Report rep : sublistReport) {
-                    valoriY.add(new Entry(i, (float) rep.getTemperatura()));
+                    valoriY.add(new Entry(i, rep.getTemperatura().floatValue()));
                     i++;
                 }
+                i=0;
                  lineDataSet= new LineDataSet(valoriY, "Temperatura");
                 break;
             case "Frequenza":
                 valoriY = new ArrayList<>();
                 //valori y
                 for (Report rep : sublistReport) {
-                    valoriY.add(new Entry(i, (float) rep.getFrequenza()));
+                    valoriY.add(new Entry(i, rep.getFrequenza().floatValue()));
                     i++;
                 }
+                i=0;
                 lineDataSet= new LineDataSet(valoriY, "Frequenza");
                 break;
             case "Peso":
                 valoriY = new ArrayList<>();
                 //valori y
                 for (Report rep : sublistReport) {
-                    valoriY.add(new Entry(i, (float) rep.getPeso()));
+                    valoriY.add(new Entry(i, rep.getPeso().floatValue()));
                     i++;
                 }
+                i=0;
                 lineDataSet= new LineDataSet(valoriY, "Peso");
                 break;
 
@@ -123,12 +145,6 @@ public class GraphsFragment extends Fragment {
         limitUpper.setTextSize(15f);
         limitUpper.enableDashedLine(10f, 10f, 0);
 
-        //valori x
-        valoriX = new ArrayList<>();
-        for (Report rep : sublistReport) {
-
-            valoriX.add(rep.getData().split("-")[2] + "-" + rep.getData().split("-")[1]);
-        }
 
         //metto come valori di x le date dei report e sposto i valori in basso
         xAxis = grafico.getXAxis();
@@ -153,6 +169,33 @@ public class GraphsFragment extends Fragment {
 
         //metto valori nel grafico
         grafico.setData(data);
+    }
+
+    public void drawBarChart(BarChart grafico){
+        valoriYreport=new ArrayList<>();
+        for (Report rep : sublistReport) {
+            valoriYreport.add(new BarEntry(i, (float) rep.getNumero()));
+            i++;
+
+        }
+        i=0;
+
+        xAxis = grafico.getXAxis();
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(valoriX));
+        xAxis.setGranularity(1f);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+        yAxis = grafico.getAxisRight();
+        yAxis.setEnabled(false);
+        Description description=new Description();
+        description.setText("");
+        BarDataSet barDataSet= new BarDataSet(valoriYreport, "Report");
+        barDataSet.setColor(Color.RED);
+        barDataSet.setValueTextSize(14f);
+        BarData data= new BarData(barDataSet);
+        graficoreport.setData(data);
+        graficoreport.setDescription(description);
+
     }
 }
 

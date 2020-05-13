@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 
@@ -129,9 +130,10 @@ public class HomeFragment extends Fragment {
                 Button modifica = alertview.findViewById(R.id.modifyalert);
                 Button annulla = alertview.findViewById(R.id.cancelalert);
 
+                DecimalFormat intero = new DecimalFormat("####0");//approssimo a intero
                 //setto i suoi campi con i valori del report cliccato
                 Temperatura.setText(""+reports.get(position).getTemperatura());
-                Battito.setText(""+reports.get(position).getFrequenza());
+                Battito.setText(""+intero.format(reports.get(position).getFrequenza()));
                 Peso.setText(""+reports.get(position).getPeso());
 
 
@@ -158,6 +160,7 @@ public class HomeFragment extends Fragment {
                         reports = MainActivity.MyDatabase.myDao().getReportsDesc();
                         reportAdapter.updateList(reports);
                         dialog.dismiss();
+                        Toast.makeText(getContext(), "Report modificato", Toast.LENGTH_SHORT).show();
                     }
                 });
 

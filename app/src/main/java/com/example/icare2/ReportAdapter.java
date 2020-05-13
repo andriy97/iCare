@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class ReportAdapter extends BaseAdapter {
@@ -45,11 +46,13 @@ public class ReportAdapter extends BaseAdapter {
         TextView pressione = convertView.findViewById(R.id.battito);
         TextView peso = convertView.findViewById(R.id.peso);
 
+        DecimalFormat una = new DecimalFormat("####0.0");//approssimo a una cifra dopo virgola
+        DecimalFormat intero = new DecimalFormat("####0");//approssimo a intero
         Report selectedReport= report.get(position);
         giorno.setText("data: "+selectedReport.getData());
-        temperatura.setText("temperatura: "+selectedReport.getTemperatura());
-        pressione.setText("bpm: "+selectedReport.getFrequenza());
-        peso.setText("peso: "+selectedReport.getPeso());
+        temperatura.setText("temperatura: "+una.format(selectedReport.getTemperatura()) + "C°");
+        pressione.setText("bpm: "+intero.format(selectedReport.getFrequenza())+"bpm");
+        peso.setText("peso: "+una.format(selectedReport.getPeso())+"Kg");
 
 
         return convertView;
