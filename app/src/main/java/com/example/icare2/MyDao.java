@@ -16,10 +16,10 @@ public interface MyDao { //metodi per manipolare il database
     public void addReport(Report report);
 
     //query ritorna tutti i report (o la media del giorno) dal piu recente
-    @Query("select id, data, AVG(temperatura) as temperatura, AVG(frequenza) as frequenza, AVG(peso) as peso, COUNT(*) as numero from Reports group by data order by data DESC")
+    @Query("select id, data, AVG(temperatura) as temperatura, AVG(frequenza) as frequenza, AVG(peso) as peso, COUNT(*) as numero, nota from Reports group by data order by data DESC")
     public List<Report> getReportsDesc();
     //query ritorna tutti i report (o la media del giorno) dal meno recente
-    @Query("select id, data, AVG(temperatura) as temperatura, AVG(frequenza) as frequenza, AVG(peso) as peso, COUNT(*) as numero from Reports group by data order by data ASC")
+    @Query("select id, data, AVG(temperatura) as temperatura, AVG(frequenza) as frequenza, AVG(peso) as peso, COUNT(*) as numero, nota from Reports group by data order by data ASC")
     public List<Report> getReportsAsc();
     //ritorna i report di un certo giorno
     @Query("select * from Reports WHERE data=:date order by data ASC")

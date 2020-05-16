@@ -3,9 +3,10 @@ package com.example.icare2;
 public class Campo {
     private String titolo;
     private double valore;
-
-
     private String valoredata;
+    private String nota;
+
+
 
     public Campo(String titolo, double valore) {
         this.titolo = titolo;
@@ -38,5 +39,12 @@ public class Campo {
 
     public void setTitolo(String titolo) {
         this.titolo = titolo;
+    }
+    public String getNota() {
+        return nota;
+    }
+
+    public void setNota(String nota) {
+        this.nota = nota;
     }
 }

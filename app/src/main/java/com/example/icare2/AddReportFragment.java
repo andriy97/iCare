@@ -42,7 +42,7 @@ import java.util.Random;
  */
 public class AddReportFragment extends Fragment {
     private ListView campilistView;
-    String data;
+    String data, nota;
     private Button addButton;
     Double valoreInserito;
     String mese, giorno, anno;
@@ -65,12 +65,14 @@ public class AddReportFragment extends Fragment {
         Campo Temperatura = new Campo("Temperatura (C°)");
         Campo Pressione = new Campo("Frequenza Cardiaca (bpm)");
         Campo Peso = new Campo("Peso (Kg)");
+        Campo Note = new Campo ("Note");
 
         final List<Campo> listadicampi= new ArrayList<>();
         listadicampi.add(Data);
         listadicampi.add(Temperatura);
         listadicampi.add(Pressione);
         listadicampi.add(Peso);
+        listadicampi.add(Note);
 
         final CampiListAdapter campiListAdapter = new CampiListAdapter(getContext(), listadicampi);
         campilistView.setAdapter(campiListAdapter);
@@ -104,6 +106,37 @@ public class AddReportFragment extends Fragment {
                         }
                     }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                     datedialog.show();
+                }else if(listadicampi.get(position).getTitolo()=="Note") {
+                    //creo finestra di dialogo per inserire la nota
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Light_Dialog);
+                    builder.setTitle(listadicampi.get(position).getTitolo());
+                    final EditText input = new EditText(getContext());
+                    input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+                    builder.setView(input);
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                nota =input.getText().toString();
+                                listadicampi.get(position).setNota(nota);
+                                campilistView.setAdapter(campiListAdapter); //aggiorno la listview con il valore inserito
+                            }catch (Exception e){
+                                Toast.makeText(getContext(), "Inserisci un valore valido", Toast.LENGTH_SHORT).show();
+                            }
+
+
+
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    builder.create();
+                    builder.show();
+
                 }else{
 
                     //creo finestra di dialogo per inserire il dato
@@ -162,6 +195,7 @@ public class AddReportFragment extends Fragment {
                    report.setFrequenza(pressione_);
                    report.setTemperatura(temperatura_);
                    report.setPeso(peso_);
+                   report.setNota(nota);
 
                    MainActivity.MyDatabase.myDao().addReport(report); //aggiungo il report al database
                    Toast.makeText(getActivity(), "Report aggiunto", Toast.LENGTH_SHORT).show();

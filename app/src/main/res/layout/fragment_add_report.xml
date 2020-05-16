@@ -13,14 +13,12 @@
 
         <ListView
             android:id="@+id/campiList"
-            android:layout_width="393dp"
-            android:layout_height="346dp"
-            android:layout_marginBottom="28dp"
+            android:layout_width="373dp"
+            android:layout_height="474dp"
             app:layout_constraintBottom_toTopOf="@+id/addbutton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.733" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/addbutton"

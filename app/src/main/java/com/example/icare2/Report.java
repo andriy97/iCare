@@ -22,6 +22,9 @@ public class Report {
     @ColumnInfo
     private Double peso;
     @ColumnInfo
+    private String nota;
+
+    @ColumnInfo
     private int numero;
 
 
@@ -40,6 +43,14 @@ public class Report {
 
     public void setNumero(int numero) {
         this.numero = numero;
+    }
+
+    public String getNota() {
+        return nota;
+    }
+
+    public void setNota(String nota) {
+        this.nota = nota;
     }
 
     public String getData() {

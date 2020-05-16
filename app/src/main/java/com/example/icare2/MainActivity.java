@@ -11,6 +11,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static FragmentManager fragmentManager;
     public static MyDatabase MyDatabase; //creo l'istanza del database
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

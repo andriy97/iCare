@@ -30,12 +30,13 @@ public class Notification_reciever extends BroadcastReceiver {
         if(!reports.get(0).getData().equals(formattedDate)) { //se non c'è già il report quel giorno faccio partire la norifica
 
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+            //intent per aprire mainActivity
             Intent activityDaAprire = new Intent(context, MainActivity.class);
             activityDaAprire.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 100, activityDaAprire, PendingIntent.FLAG_UPDATE_CURRENT);
 
+            //creo canale
             String NOTIFICATION_CHANNEL_ID = "my_channel_id_01";
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "My Notifications", NotificationManager.IMPORTANCE_HIGH);
 
@@ -48,12 +49,18 @@ public class Notification_reciever extends BroadcastReceiver {
                 notificationManager.createNotificationChannel(notificationChannel);
             }
 
+
+
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                     .setContentIntent(pendingIntent)
                     .setSmallIcon(R.drawable.notification_drawer)
                     .setContentTitle("Non mettere a rischio la tua salute")
                     .setContentText("Clicca per aggiungere il report")
-                    .setAutoCancel(true);
+                    .setAutoCancel(true)
+                    //.addAction(R.mipmap.ic_launcher, "Ricorda più tardi",  )
+                    //.build()
+                    ;
+
             notificationManager.notify(100, builder.build());
 
         }
