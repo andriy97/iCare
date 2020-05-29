@@ -55,7 +55,7 @@ public class CampiListAdapter extends BaseAdapter {
             }
         } else if(selectedReport.getTitolo()=="Note"){
             valore.setText(""+selectedReport.getNota());
-            if(selectedReport.getValoredata()==null){
+            if(selectedReport.getNota()==null){
                 valore.setText("clicca per aggiungere");
             }
         }else{

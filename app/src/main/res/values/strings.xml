@@ -10,4 +10,11 @@
     <string name="data">Data</string>
     <string name="temperatura">Temperatura</string>
     <string name="pressione">Pressione</string>
+
+    <string-array name="periodoMonitoraggio">
+        <item>3 giorni</item>
+        <item>7 giorni</item>
+        <item>14 giorni</item>
+        <item>30 giorni</item>
+    </string-array>
 </resources>

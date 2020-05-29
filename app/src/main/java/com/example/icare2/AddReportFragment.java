@@ -3,15 +3,20 @@ package com.example.icare2;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 
 import android.text.InputFilter;
@@ -30,6 +35,7 @@ import android.widget.ListView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,6 +52,10 @@ public class AddReportFragment extends Fragment {
     private Button addButton;
     Double valoreInserito;
     String mese, giorno, anno;
+    List<Report> reports;
+    double mediaTemp, mediaFreq, mediaPeso;
+
+
     public AddReportFragment() {
         // Required empty public constructor
     }
@@ -57,6 +67,8 @@ public class AddReportFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_add_report, container, false);
+
+        final SharedPreferences prioritySharedReference= getActivity().getSharedPreferences("priority", getContext().MODE_PRIVATE);
 
         campilistView= view.findViewById(R.id.campiList);
 
@@ -199,12 +211,91 @@ public class AddReportFragment extends Fragment {
 
                    MainActivity.MyDatabase.myDao().addReport(report); //aggiungo il report al database
                    Toast.makeText(getActivity(), "Report aggiunto", Toast.LENGTH_SHORT).show();
+
+                   //Faccio media e controllo che sia entro i limiti prestabiliti
+
+                   reports=MainActivity.MyDatabase.myDao().getReportsDesc(); //tutti i report
+
+                   Double minTemp, maxTemp, minFreq, maxFreq, minPeso, maxPeso;
+                   int Days;
+                   minTemp=Double.parseDouble(prioritySharedReference.getString("minTemp","0"));
+                   maxTemp=Double.parseDouble(prioritySharedReference.getString("maxTemp","10000"));
+                   minFreq=Double.parseDouble(prioritySharedReference.getString("minFreq", "0"));
+                   maxFreq=Double.parseDouble(prioritySharedReference.getString("maxFreq", "10000"));
+                   minPeso=Double.parseDouble(prioritySharedReference.getString("minPeso", "0"));
+                   maxPeso=Double.parseDouble(prioritySharedReference.getString("maxPeso", "10000"));
+
+                   Days=prioritySharedReference.getInt("monitorDays", 3);
+
+                   List<Report> nReports=getFirstNReports(reports, Days); //prendo i primi n report a seconda delle preferenze di monitoraggio
+
+                   ArrayList<Double> media=faiMediaValori(nReports);
+                   if(media.get(0)>maxTemp||media.get(0)<minTemp||media.get(1)>maxFreq|| media.get(1)<minFreq||media.get(2)>maxPeso||media.get(2)<minPeso){
+                        notificaMediaSuperata();
+                   }
+
                    //ritorno alla home
-                  // MainActivity.fragmentManager.beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
                    MainActivity.fragmentManager.popBackStackImmediate();
                }
             }
         });
         return view;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void notificaMediaSuperata(){
+        NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(getContext().NOTIFICATION_SERVICE);
+        NotificationChannel notificationChannel = new NotificationChannel("prova", "My Notifications", NotificationManager.IMPORTANCE_HIGH);
+
+        // Configure the notification channel.
+        notificationChannel.setDescription("Channel description");
+        notificationChannel.enableLights(true);
+        notificationChannel.setLightColor(Color.RED);
+        notificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
+        notificationChannel.enableVibration(true);
+        notificationManager.createNotificationChannel(notificationChannel);
+
+        NotificationCompat.Builder builderProva = new NotificationCompat.Builder(getContext(), "prova")
+                .setSmallIcon(R.drawable.notification_drawer)
+                .setContentTitle("Blabla")
+                .setContentText("Media superata");
+
+
+        notificationManager.notify(1, builderProva.build());
+    }
+
+    public ArrayList<Double> faiMediaValori(List<Report> reports){
+        ArrayList<Double> media = new ArrayList<>();
+
+        for (Report report : reports) {
+            mediaTemp+=report.getTemperatura();
+            mediaFreq+=report.getFrequenza();
+            mediaPeso+=report.getPeso();
+        }
+        mediaTemp=mediaTemp/reports.size();
+        mediaFreq=mediaFreq/reports.size();
+        mediaPeso=mediaPeso/reports.size();
+
+        media.add(mediaTemp);
+        media.add(mediaFreq);
+        media.add(mediaPeso);
+
+
+        return media;
+    }
+
+    public List<Report> getFirstNReports(List<Report> reports, int n){
+        List<Report> nReports=new ArrayList<>();
+        if (n>reports.size()){  //se il periodo da monitorare è più grande dei report presenti li prendo tutti
+            for (Report report : reports) {
+                nReports.add(report);
+            }
+
+        }else{
+            for (int i=0; i<n; i++){  //altrimenti prendo i primi n report
+                nReports.add(reports.get(i));
+            }
+        }
+        return nReports;
     }
 }

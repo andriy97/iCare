@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
@@ -29,6 +30,7 @@ public class DayReportsFragment extends Fragment {
     private List<Report> dayReports; //lista di report in un giorno specifico
     private List<Report> reports; //tutti i report
     private ListView dayreportlistview;
+    private TextView titoloFragment;
 
 
 
@@ -44,6 +46,9 @@ public class DayReportsFragment extends Fragment {
         final int positionPassed=bundle.getInt("position");
         dayReports=MainActivity.MyDatabase.myDao().getDayReports(reports.get(positionPassed).getData());
         dayreportlistview = view.findViewById(R.id.dayreportlist);
+
+        titoloFragment= view.findViewById(R.id.titoloFragment);
+        titoloFragment.setText("Tutti i report del giorno "+reports.get(positionPassed).getData()+":");
         //popolo la listview
         final ReportAdapter reportAdapter = new ReportAdapter(getContext(), dayReports);
        dayreportlistview.setAdapter(reportAdapter);
@@ -168,8 +173,17 @@ public class DayReportsFragment extends Fragment {
         dayreportlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                String nota=dayReports.get(position).getNota();
 
+                if (nota != null) {
 
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                    alert.setMessage(nota);
+                    alert.show();
+
+                } else {
+                    Toast.makeText(getContext(), "Non è presente alcuna nota", Toast.LENGTH_SHORT).show();
+                }
                 }
 
         });

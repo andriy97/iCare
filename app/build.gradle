@@ -22,9 +22,10 @@ android {
     }
 
 }
-//grafici
+//grafici e
 repositories {
     maven { url 'https://jitpack.io' }
+
 }
 
 dependencies {
@@ -49,4 +50,5 @@ dependencies {
 
     //grafici
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
 }

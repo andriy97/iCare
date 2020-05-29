@@ -209,14 +209,25 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String nota=reports.get(position).getNota();
-                if(nota!=null){
 
-                    AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                    alert.setMessage(nota);
-                    alert.show();
+                if (reports.get(position).getNumero() > 1) {
+                    //se il giorno ha più di un report apro un fragment con quei report e gli passo la posizione
+                    DayReportsFragment dayReportsFragment = new DayReportsFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("position", position);
+                    dayReportsFragment.setArguments(bundle);
+                    MainActivity.fragmentManager.beginTransaction().replace(R.id.fragment_container, dayReportsFragment).
+                            addToBackStack(null).commit(); //aggiungo al backstack
+                }else {
+                    if (nota != null) {
 
-                }else{
-                    Toast.makeText(getContext(), "Non è presente alcuna nota", Toast.LENGTH_SHORT).show();
+                        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                        alert.setMessage(nota);
+                        alert.show();
+
+                    } else {
+                        Toast.makeText(getContext(), "Non è presente alcuna nota", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
             }
