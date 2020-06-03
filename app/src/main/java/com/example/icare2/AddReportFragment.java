@@ -228,11 +228,27 @@ public class AddReportFragment extends Fragment {
                    Days=prioritySharedReference.getInt("monitorDays", 3);
 
                    List<Report> nReports=getFirstNReports(reports, Days); //prendo i primi n report a seconda delle preferenze di monitoraggio
-
+                    //
                    ArrayList<Double> media=faiMediaValori(nReports);
-                   if(media.get(0)>maxTemp||media.get(0)<minTemp||media.get(1)>maxFreq|| media.get(1)<minFreq||media.get(2)>maxPeso||media.get(2)<minPeso){
-                        notificaMediaSuperata();
+                   if(media.get(0)>maxTemp){
+                       notificaMediaSuperata("temperatura", "alto", 1);
                    }
+                   if(media.get(0)<minTemp){
+                       notificaMediaSuperata("temperatura", "basso", 1);
+                   }
+                   if(media.get(1)>maxFreq){
+                       notificaMediaSuperata("frequenza cardiaca", "alto", 2);
+                   }
+                   if(media.get(1)<minFreq){
+                       notificaMediaSuperata("frequenza cardiaca", "basso", 2);
+                   }
+                   if(media.get(2)>maxPeso){
+                       notificaMediaSuperata("peso", "alto", 3);
+                   }
+                   if(media.get(2)<minPeso){
+                       notificaMediaSuperata("peso", "basso", 3);
+                   }
+
 
                    //ritorno alla home
                    MainActivity.fragmentManager.popBackStackImmediate();
@@ -243,9 +259,9 @@ public class AddReportFragment extends Fragment {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void notificaMediaSuperata(){
+    public void notificaMediaSuperata(String valore, String altobasso, int id){
         NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(getContext().NOTIFICATION_SERVICE);
-        NotificationChannel notificationChannel = new NotificationChannel("prova", "My Notifications", NotificationManager.IMPORTANCE_HIGH);
+        NotificationChannel notificationChannel = new NotificationChannel(""+valore, "My Notifications", NotificationManager.IMPORTANCE_HIGH);
 
         // Configure the notification channel.
         notificationChannel.setDescription("Channel description");
@@ -255,13 +271,13 @@ public class AddReportFragment extends Fragment {
         notificationChannel.enableVibration(true);
         notificationManager.createNotificationChannel(notificationChannel);
 
-        NotificationCompat.Builder builderProva = new NotificationCompat.Builder(getContext(), "prova")
+        NotificationCompat.Builder builderProva = new NotificationCompat.Builder(getContext(), ""+valore)
                 .setSmallIcon(R.drawable.notification_drawer)
-                .setContentTitle("Blabla")
-                .setContentText("Media superata");
+                .setContentTitle("Attenzione, media superata!")
+                .setContentText("Il valore medio di "+valore +" è troppo "+altobasso);
 
 
-        notificationManager.notify(1, builderProva.build());
+        notificationManager.notify(id, builderProva.build());
     }
 
     public ArrayList<Double> faiMediaValori(List<Report> reports){

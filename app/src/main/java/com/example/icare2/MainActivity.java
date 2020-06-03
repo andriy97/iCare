@@ -32,6 +32,11 @@ public class MainActivity extends AppCompatActivity {
     public static MyDatabase MyDatabase; //creo l'istanza del database
 
 
+
+
+
+
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
@@ -83,6 +88,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        final SharedPreferences FirstTimeCheck= this.getSharedPreferences("priority", this.MODE_PRIVATE);
+        final SharedPreferences.Editor editor=FirstTimeCheck.edit();
+
         setContentView(R.layout.activity_main);
         fragmentManager = getSupportFragmentManager();
         MyDatabase = Room.databaseBuilder(getApplicationContext(), MyDatabase.class, "reportdb").allowMainThreadQueries().build(); //creo database (faccio allow main tread anche se non è da fare sul main thread)
@@ -93,8 +102,16 @@ public class MainActivity extends AppCompatActivity {
             {
                 return;
             }
-            fragmentManager.beginTransaction().add(R.id.fragment_container, new HomeFragment()).commit(); //aggiungo il fragment HomeFragment al container
+
+            if(FirstTimeCheck.getBoolean("firstTime", true)==false){
+                fragmentManager.beginTransaction().add(R.id.fragment_container, new HomeFragment()).commit(); //aggiungo il fragment HomeFragment al container
+
+            }else{
+                fragmentManager.beginTransaction().add(R.id.fragment_container, new PriorityFragment()).commit();
+
+            }
         }
+
 
     }
 

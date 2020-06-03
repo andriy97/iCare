@@ -3,6 +3,7 @@ package com.example.icare2;
 import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.util.Range;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,8 @@ public class PriorityFragment extends Fragment   {
             final SharedPreferences prioritySharedReference= getActivity().getSharedPreferences("priority", getContext().MODE_PRIVATE);
             final SharedPreferences.Editor editor=prioritySharedReference.edit();
 
+            editor.putBoolean("firstTime", false); //setto su false la prima apertura
+
 
             // Inflate the layout for this fragment
             View view = inflater.inflate(R.layout.fragment_priority_, container, false);
@@ -53,6 +56,15 @@ public class PriorityFragment extends Fragment   {
             final EditText maxFreq = view.findViewById(R.id.maxFreq);
             final EditText minPeso = view.findViewById(R.id.minPeso);
             final EditText maxPeso = view.findViewById(R.id.maxPeso);
+
+            minTemp.setFilters(new InputFilter[] { new InputFilter.LengthFilter(4) }); //max numero di caratteri
+            maxTemp.setFilters(new InputFilter[] { new InputFilter.LengthFilter(4) }); //max numero di caratteri
+            minFreq.setFilters(new InputFilter[] { new InputFilter.LengthFilter(4) }); //max numero di caratteri
+            maxFreq.setFilters(new InputFilter[] { new InputFilter.LengthFilter(4) }); //max numero di caratteri
+            minPeso.setFilters(new InputFilter[] { new InputFilter.LengthFilter(4) }); //max numero di caratteri
+            maxPeso.setFilters(new InputFilter[] { new InputFilter.LengthFilter(4) }); //max numero di caratteri
+
+
 
             Spinner monitorDays=view.findViewById(R.id.monitorDays);
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.periodoMonitoraggio, android.R.layout.simple_spinner_item);
@@ -153,7 +165,12 @@ public class PriorityFragment extends Fragment   {
                 editor.putInt("monitorDays", Days);
                 editor.commit();
                 Toast.makeText(getContext(), "Preferenze salvate", Toast.LENGTH_SHORT).show();
-                    MainActivity.fragmentManager.popBackStackImmediate();
+
+                    if(MainActivity.fragmentManager.getBackStackEntryCount()!=0){
+                        MainActivity.fragmentManager.popBackStackImmediate();
+                    }else{
+                        MainActivity.fragmentManager.beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+                    }
                 }
             });
 
