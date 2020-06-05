@@ -35,6 +35,7 @@ public class PriorityFragment extends Fragment   {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+
             final SharedPreferences prioritySharedReference= getActivity().getSharedPreferences("priority", getContext().MODE_PRIVATE);
             final SharedPreferences.Editor editor=prioritySharedReference.edit();
 

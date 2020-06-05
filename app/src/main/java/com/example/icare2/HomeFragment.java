@@ -14,10 +14,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +42,8 @@ public class HomeFragment extends Fragment {
     //variabili
     private ListView listViewReport; //listview da legare all'id nel file xml
     private List<Report> reports; //lista di oggetti report
+    private List<Report> last7Reports;
+   private ReportAdapter reportAdapter;
 
 
     public HomeFragment() {
@@ -53,6 +57,10 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        Spinner filtroSpinner=view.findViewById(R.id.filtroSpinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.filtro, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        filtroSpinner.setAdapter(adapter);
 
         //collego i buttons a quelli nel file xml
         newReport = view.findViewById(R.id.newreportbutton);
@@ -73,14 +81,50 @@ public class HomeFragment extends Fragment {
 
 
         //salvo tutti i report del database in una lista
-        reports = MainActivity.MyDatabase.myDao().getReportsDesc();
-        if (reports.size() == 0) {
-            ifvuototext.setText("Non è presente alcun report");
-        }
+
 
         //popolo la listview
-        final ReportAdapter reportAdapter = new ReportAdapter(getContext(), reports);
-        listViewReport.setAdapter(reportAdapter);
+
+
+
+        filtroSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch(position){
+                    case 0:
+                        reports = MainActivity.MyDatabase.myDao().getReportsDesc();
+                        if (reports.size() == 0) {
+                            ifvuototext.setText("Non è presente alcun report");
+                        }
+                        reportAdapter= new ReportAdapter(getContext(), reports);
+                        listViewReport.setAdapter(reportAdapter);
+                        break;
+                    case 1:
+                        reports = MainActivity.MyDatabase.myDao().getReportsDesc();
+                        if(reports.size()>7) {
+                           last7Reports = reports.subList(0, 6);
+                            //reportAdapter.filterList(last7Reports);
+                            reportAdapter.updateList(last7Reports);
+                        }
+                        break;
+                    case 2:
+                        reports = MainActivity.MyDatabase.myDao().getReportsDesc();
+                        if(reports.size()>30) {
+                            List<Report> last30Reports = reports.subList(0,30);
+                            reportAdapter.updateList(last30Reports);
+                        }else{
+                            reportAdapter.updateList(reports);
+                        }
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
 
         //reazione al click lungo

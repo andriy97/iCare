@@ -17,4 +17,11 @@
         <item>14 giorni</item>
         <item>30 giorni</item>
     </string-array>
+
+    <string-array name="filtro">
+
+        <item>Tutti</item>
+        <item>Ultima settimana</item>
+        <item>Ultimo mese</item>
+    </string-array>
 </resources>

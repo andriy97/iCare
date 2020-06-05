@@ -69,6 +69,12 @@ public class ReportAdapter extends BaseAdapter {
         report.addAll(newlist);
         this.notifyDataSetChanged();
     }
+
+//elimina dalla lista i report passati come parametro
+    public void filterList(List<Report> newlist) {
+        report.removeAll(newlist);
+        this.notifyDataSetChanged();
+    }
 }
 
 
