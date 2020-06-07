@@ -1,5 +1,6 @@
 package com.example.icare2;
 
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -18,6 +19,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static android.content.Context.ALARM_SERVICE;
+
 public class Notification_reciever extends BroadcastReceiver {
     List<Report> reports;
     @Override
@@ -30,10 +33,16 @@ public class Notification_reciever extends BroadcastReceiver {
         if(!reports.get(0).getData().equals(formattedDate)) { //se non c'è già il report quel giorno faccio partire la norifica
 
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+
             //intent per aprire mainActivity
             Intent activityDaAprire = new Intent(context, MainActivity.class);
             activityDaAprire.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 100, activityDaAprire, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            //delay notifica
+                Intent intent2 = new Intent(context, PostPone_reciever.class);
+                PendingIntent pendingIntent2 = PendingIntent.getBroadcast(context, 100, intent2, PendingIntent.FLAG_UPDATE_CURRENT);
+
 
             //creo canale
             String NOTIFICATION_CHANNEL_ID = "my_channel_id_01";
@@ -57,7 +66,7 @@ public class Notification_reciever extends BroadcastReceiver {
                     .setContentTitle("Non mettere a rischio la tua salute")
                     .setContentText("Clicca per aggiungere il report")
                     .setAutoCancel(true)
-                    //.addAction(R.mipmap.ic_launcher, "Ricorda più tardi",  )
+                    .addAction(R.mipmap.ic_launcher, "Ricorda più tardi",  pendingIntent2)
                     //.build()
                     ;
 

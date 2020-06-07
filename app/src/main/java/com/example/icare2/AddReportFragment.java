@@ -231,21 +231,27 @@ public class AddReportFragment extends Fragment {
                     //
                    ArrayList<Double> media=faiMediaValori(nReports);
                    if(media.get(0)>maxTemp){
+                       if(prioritySharedReference.getInt("temperatura", 0)>3)
                        notificaMediaSuperata("temperatura", "alto", 1);
                    }
                    if(media.get(0)<minTemp){
+                       if(prioritySharedReference.getInt("temperatura", 0)>3)
                        notificaMediaSuperata("temperatura", "basso", 1);
                    }
                    if(media.get(1)>maxFreq){
+                       if(prioritySharedReference.getInt("frequenza", 0)>3)
                        notificaMediaSuperata("frequenza cardiaca", "alto", 2);
                    }
                    if(media.get(1)<minFreq){
+                       if(prioritySharedReference.getInt("frequenza", 0)>3)
                        notificaMediaSuperata("frequenza cardiaca", "basso", 2);
                    }
                    if(media.get(2)>maxPeso){
+                       if(prioritySharedReference.getInt("peso", 0)>3)
                        notificaMediaSuperata("peso", "alto", 3);
                    }
                    if(media.get(2)<minPeso){
+                       if(prioritySharedReference.getInt("peso", 0)>3)
                        notificaMediaSuperata("peso", "basso", 3);
                    }
 

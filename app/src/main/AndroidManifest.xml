@@ -23,6 +23,7 @@
         </activity>
 
         <receiver android:name=".Notification_reciever" />
+        <receiver android:name=".PostPone_reciever" />
     </application>
 
 </manifest>
