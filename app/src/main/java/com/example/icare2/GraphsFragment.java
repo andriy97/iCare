@@ -139,11 +139,6 @@ public class GraphsFragment extends Fragment {
         grafico.setDragEnabled(true);
         grafico.setScaleEnabled(false);
 
-        LimitLine limitUpper = new LimitLine(38f, "pericolo");
-        limitUpper.setLineWidth(4f);
-        limitUpper.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
-        limitUpper.setTextSize(15f);
-        limitUpper.enableDashedLine(10f, 10f, 0);
 
 
         //metto come valori di x le date dei report e sposto i valori in basso
@@ -154,7 +149,7 @@ public class GraphsFragment extends Fragment {
         //disabilito valori y sulla destra
         yAxis = grafico.getAxisRight();
         yAxis.setEnabled(false);
-        grafico.getAxisLeft().addLimitLine(limitUpper);
+
 
 
 

@@ -1,6 +1,7 @@
 package com.example.icare2;
 
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,6 +13,7 @@ import android.os.Build;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,6 +69,7 @@ public class Notification_reciever extends BroadcastReceiver {
                     .setContentText("Clicca per aggiungere il report")
                     .setAutoCancel(true)
                     .addAction(R.mipmap.ic_launcher, "Ricorda più tardi",  pendingIntent2)
+                    .setColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
                     //.build()
                     ;
 

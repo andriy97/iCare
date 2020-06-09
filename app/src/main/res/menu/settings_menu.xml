@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/priority"
-        android:title="Priorità">
+        android:title="Preferenze">
 
     </item>
 
     <item android:id="@+id/notifications"
-        android:title="Notifiche">
+        android:title="Imposta orario notifiche">
 
     </item>
 
