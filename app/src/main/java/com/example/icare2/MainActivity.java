@@ -34,9 +34,16 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    //menu toolbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.settings_menu, menu);
+        return true;
+    }
 
 
-
+//opzioni dentro al menu
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
@@ -76,25 +83,17 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //menu toolbar
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater=getMenuInflater();
-        inflater.inflate(R.menu.settings_menu, menu);
-        return true;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
+        //controllo se è il primo accesso
         final SharedPreferences FirstTimeCheck= this.getSharedPreferences("priority", this.MODE_PRIVATE);
-        final SharedPreferences.Editor editor=FirstTimeCheck.edit();
 
         setContentView(R.layout.activity_main);
         fragmentManager = getSupportFragmentManager();
-        MyDatabase = Room.databaseBuilder(getApplicationContext(), MyDatabase.class, "reportdb").allowMainThreadQueries().build(); //creo database (faccio allow main tread anche se non è da fare sul main thread)
+        MyDatabase = Room.databaseBuilder(getApplicationContext(), MyDatabase.class, "reportdb").allowMainThreadQueries().build();
 
         if (findViewById(R.id.fragment_container)!=null){ //se il container esiste, esiste perché l'ho creato in activity_main.xml
 
@@ -104,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if(FirstTimeCheck.getBoolean("firstTime", true)==false){
-                fragmentManager.beginTransaction().add(R.id.fragment_container, new HomeFragment()).commit(); //aggiungo il fragment HomeFragment al container
+                fragmentManager.beginTransaction().add(R.id.fragment_container, new HomeFragment()).commit();
 
             }else{
                 fragmentManager.beginTransaction().add(R.id.fragment_container, new PriorityFragment()).commit();

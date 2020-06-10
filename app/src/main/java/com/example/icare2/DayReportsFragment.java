@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class DayReportsFragment extends Fragment {
 
-    private List<Report> dayReports; //lista di report in un giorno specifico
+    private List<Report> dayReports; //lista di report di un giorno specifico
     private List<Report> reports; //tutti i report
     private ListView dayreportlistview;
     private TextView titoloFragment;
@@ -39,29 +39,26 @@ public class DayReportsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_day_reports, container, false);
-        reports= MainActivity.MyDatabase.myDao().getReportsDesc();
-        //prendo il dato passato dall'altro fragment
 
+        //tutti i reports
+        reports= MainActivity.MyDatabase.myDao().getReportsDesc();
+
+        //posizione del report passata dall'altro fragment
         Bundle bundle=getArguments();
         final int positionPassed=bundle.getInt("position");
+        //tutti i report del giorno cliccato nell'altro fragment
         dayReports=MainActivity.MyDatabase.myDao().getDayReports(reports.get(positionPassed).getData());
         dayreportlistview = view.findViewById(R.id.dayreportlist);
-
         titoloFragment= view.findViewById(R.id.titoloFragment);
         titoloFragment.setText("Tutti i report del giorno "+reports.get(positionPassed).getData()+":");
         //popolo la listview
         final ReportAdapter reportAdapter = new ReportAdapter(getContext(), dayReports);
-       dayreportlistview.setAdapter(reportAdapter);
-
-
-
+        dayreportlistview.setAdapter(reportAdapter);
 
         //reazione al click lungo
         dayreportlistview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-
-
                 //menu con opzioni
                 PopupMenu menu = new PopupMenu(getContext(), view);
                 menu.getMenuInflater().inflate(R.menu.options_menu, menu.getMenu());
@@ -82,10 +79,8 @@ public class DayReportsFragment extends Fragment {
                                 DecimalFormat intero = new DecimalFormat("####0");//approssimo a intero
                                 //setto i suoi campi con i valori del report cliccato
                                 Temperatura.setText("" + dayReports.get(position).getTemperatura());
-                                Battito.setText("" + intero.format(dayReports.get(position).getFrequenza()));
+                                Battito.setText("" + intero.format(dayReports.get(position).getFrequenza())); //approssimo a intero il battito
                                 Peso.setText("" + dayReports.get(position).getPeso());
-
-
                                 alertbuilder.setView(alertview);
                                 final AlertDialog dialog = alertbuilder.create();
 
@@ -101,8 +96,6 @@ public class DayReportsFragment extends Fragment {
                                         reportTempo.setFrequenza((Double.parseDouble(Battito.getText().toString())));
                                         reportTempo.setPeso((Double.parseDouble(Peso.getText().toString())));
                                         reportTempo.setData(dayReports.get(position).getData());
-
-
                                         //aggiorno database
                                         MainActivity.MyDatabase.myDao().updateReport(reportTempo);
                                         //aggiorno listview
@@ -118,43 +111,32 @@ public class DayReportsFragment extends Fragment {
                                     @Override
                                     public void onClick(View v) {
                                         dialog.dismiss();
-
                                     }
                                 });
                                 dialog.show();
                                 break;
 
                             case R.id.delete_option:
-
                                 AlertDialog.Builder alert = new AlertDialog.Builder(
                                         getContext());
-
                                 alert.setMessage("Eliminare questo report?");
                                 alert.setPositiveButton("Sì", new DialogInterface.OnClickListener() {
 
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-
                                         MainActivity.MyDatabase.myDao().deleteReport(dayReports.get(position)); //elimino report cliccato dal database
                                         reportAdapter.removeElementFromList(position); //rimuovo il report dalla listview
-
                                         dialog.dismiss();
                                         Toast.makeText(getContext(), "Report eliminato", Toast.LENGTH_SHORT).show();
-
                                     }
                                 });
                                 alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-
                                         dialog.dismiss();
                                     }
                                 });
-
                                 alert.show();
-
-
                                 break;
                         }
                         return false;
@@ -168,28 +150,21 @@ public class DayReportsFragment extends Fragment {
         });
 
 
-
-
+        //reazione al click corto
         dayreportlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 String nota=dayReports.get(position).getNota();
-
                 if (nota != null) {
-
                     AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
                     alert.setMessage(nota);
                     alert.show();
-
                 } else {
                     Toast.makeText(getContext(), "Non è presente alcuna nota", Toast.LENGTH_SHORT).show();
                 }
                 }
 
         });
-
-
-
         return view;
     }
 }

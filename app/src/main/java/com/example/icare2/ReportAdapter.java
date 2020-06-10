@@ -53,8 +53,6 @@ public class ReportAdapter extends BaseAdapter {
         temperatura.setText("temperatura: "+una.format(selectedReport.getTemperatura()) + "C°");
         pressione.setText("bpm: "+intero.format(selectedReport.getFrequenza())+"bpm");
         peso.setText("peso: "+una.format(selectedReport.getPeso())+"Kg");
-
-
         return convertView;
     }
 
@@ -69,15 +67,4 @@ public class ReportAdapter extends BaseAdapter {
         report.addAll(newlist);
         this.notifyDataSetChanged();
     }
-
-//elimina dalla lista i report passati come parametro
-    public void filterList(List<Report> newlist) {
-        report.removeAll(newlist);
-        this.notifyDataSetChanged();
-    }
 }
-
-
-
-
-

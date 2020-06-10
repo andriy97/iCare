@@ -1,10 +1,7 @@
 package com.example.icare2;
-
-import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputFilter;
-import android.util.Range;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,36 +11,23 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
-import android.widget.TimePicker;
 import android.widget.Toast;
-
 import androidx.fragment.app.Fragment;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Calendar;
-
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class PriorityFragment extends Fragment   {
- private Double minTemp, maxTemp, minFreq, maxFreq, minPeso, maxPeso;
- private int Days;
-
-
+        private int Days;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-
-            final SharedPreferences prioritySharedReference= getActivity().getSharedPreferences("priority", getContext().MODE_PRIVATE);
-            final SharedPreferences.Editor editor=prioritySharedReference.edit();
-
-            editor.putBoolean("firstTime", false); //setto su false la prima apertura
-
-
             // Inflate the layout for this fragment
             View view = inflater.inflate(R.layout.fragment_priority_, container, false);
+
+            //setto su false la prima apertura
+            final SharedPreferences prioritySharedReference= getActivity().getSharedPreferences("priority", getContext().MODE_PRIVATE);
+            final SharedPreferences.Editor editor=prioritySharedReference.edit();
+            editor.putBoolean("firstTime", false);
 
            //priorità
             final NumberPicker tempPriority= view.findViewById(R.id.tempPriority);
@@ -64,7 +48,6 @@ public class PriorityFragment extends Fragment   {
             maxFreq.setFilters(new InputFilter[] { new InputFilter.LengthFilter(4) }); //max numero di caratteri
             minPeso.setFilters(new InputFilter[] { new InputFilter.LengthFilter(4) }); //max numero di caratteri
             maxPeso.setFilters(new InputFilter[] { new InputFilter.LengthFilter(4) }); //max numero di caratteri
-
 
 
             Spinner monitorDays=view.findViewById(R.id.monitorDays);
@@ -126,19 +109,7 @@ public class PriorityFragment extends Fragment   {
                     break;
             }
 
-
-
-
-
-
-
-
-
-
-
-
             Button salvaPriority= view.findViewById(R.id.salvapriority);
-
             salvaPriority.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -167,6 +138,7 @@ public class PriorityFragment extends Fragment   {
                 editor.commit();
                 Toast.makeText(getContext(), "Preferenze salvate", Toast.LENGTH_SHORT).show();
 
+                //controllo se è il primo accesso o no
                     if(MainActivity.fragmentManager.getBackStackEntryCount()!=0){
                         MainActivity.fragmentManager.popBackStackImmediate();
                     }else{
@@ -174,11 +146,6 @@ public class PriorityFragment extends Fragment   {
                     }
                 }
             });
-
-
-
-
-
             return view;
         }
 
@@ -189,8 +156,6 @@ public class PriorityFragment extends Fragment   {
             }else{
                 return temp.getText().toString();
             }
-
-
         }
 
     public String controllaStringheVuoteMax(EditText temp){
@@ -200,9 +165,5 @@ public class PriorityFragment extends Fragment   {
         }else{
             return temp.getText().toString();
         }
-
-
     }
-
-
 }

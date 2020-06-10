@@ -48,12 +48,11 @@ import java.util.Random;
  */
 public class AddReportFragment extends Fragment {
     private ListView campilistView;
-    String data, nota;
     private Button addButton;
     Double valoreInserito;
-    String mese, giorno, anno;
     List<Report> reports;
     double mediaTemp, mediaFreq, mediaPeso;
+    String data, nota, mese, giorno, anno;
 
 
     public AddReportFragment() {
@@ -71,34 +70,32 @@ public class AddReportFragment extends Fragment {
         final SharedPreferences prioritySharedReference= getActivity().getSharedPreferences("priority", getContext().MODE_PRIVATE);
 
         campilistView= view.findViewById(R.id.campiList);
+        addButton = view.findViewById(R.id.addbutton);
 
-        //creo i campi che saranno messi nella listview
+        //creo i valori del report
         Campo Data = new Campo("Data");
         Campo Temperatura = new Campo("Temperatura (C°)");
         Campo Pressione = new Campo("Frequenza Cardiaca (bpm)");
         Campo Peso = new Campo("Peso (Kg)");
         Campo Note = new Campo ("Note");
-
+        //aggiungo i valori in una lista
         final List<Campo> listadicampi= new ArrayList<>();
         listadicampi.add(Data);
         listadicampi.add(Temperatura);
         listadicampi.add(Pressione);
         listadicampi.add(Peso);
         listadicampi.add(Note);
-
+        //passo la lista all'adapter
         final CampiListAdapter campiListAdapter = new CampiListAdapter(getContext(), listadicampi);
         campilistView.setAdapter(campiListAdapter);
-        addButton = view.findViewById(R.id.addbutton);
 
-
-
+        //reazione al click
         campilistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                    //creo calendarAlert per inserire data
                 if(listadicampi.get(position).getTitolo()=="Data"){
+                    //creo calendarAlert per inserire data
                     Calendar calendar =Calendar.getInstance();
-
                     DatePickerDialog datedialog = new  DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -107,10 +104,10 @@ public class AddReportFragment extends Fragment {
                             giorno=""+dayOfMonth;
                             //se non hanno lo 0 davanti glielo aggiungo
                             if(String.valueOf(month).length()<2)
-                                mese= String.format("%02d", month+1);
+                                mese= String.format("%02d", month+1); //mese parte da 0, aggiungo 1
                             if(String.valueOf(dayOfMonth).length()<2)
                                 giorno=String.format("%02d", dayOfMonth);
-
+                            //combino la stringa data
                             data=anno+"-"+mese+"-"+giorno;
                             listadicampi.get(position).setValoredata(data);
                             campilistView.setAdapter(campiListAdapter); //aggiorno la listview con il valore inserito
@@ -135,9 +132,6 @@ public class AddReportFragment extends Fragment {
                             }catch (Exception e){
                                 Toast.makeText(getContext(), "Inserisci un valore valido", Toast.LENGTH_SHORT).show();
                             }
-
-
-
                         }
                     });
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -151,7 +145,7 @@ public class AddReportFragment extends Fragment {
 
                 }else{
 
-                    //creo finestra di dialogo per inserire il dato
+                    //creo finestra di dialogo per inserire il valore
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Light_Dialog);
                     builder.setTitle(listadicampi.get(position).getTitolo());
                     final EditText input = new EditText(getContext());
@@ -169,9 +163,6 @@ public class AddReportFragment extends Fragment {
                             }catch (Exception e){
                                 Toast.makeText(getContext(), "Inserisci un valore valido", Toast.LENGTH_SHORT).show();
                             }
-
-
-
                         }
                     });
                     builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
@@ -183,8 +174,6 @@ public class AddReportFragment extends Fragment {
                     builder.create();
                     builder.show();
                 }
-
-
             }
         });
 
@@ -195,11 +184,9 @@ public class AddReportFragment extends Fragment {
                if(listadicampi.get(0).getValoredata()==null || listadicampi.get(1).getValore()==0.0 || listadicampi.get(2).getValore()==0.0 || listadicampi.get(3).getValore()==0.0){
                    Toast.makeText(getContext(), "Compila il report", Toast.LENGTH_SHORT).show();
                }else {
-
                    Double temperatura_ = listadicampi.get(1).getValore();
                    Double pressione_ = listadicampi.get(2).getValore();
                    Double peso_ = listadicampi.get(3).getValore();
-
 
                    //creo l'oggetto Report passandogli i dati presi in input da utente
                    Report report = new Report();
@@ -208,14 +195,13 @@ public class AddReportFragment extends Fragment {
                    report.setTemperatura(temperatura_);
                    report.setPeso(peso_);
                    report.setNota(nota);
-
-                   MainActivity.MyDatabase.myDao().addReport(report); //aggiungo il report al database
+                   //aggiungo report al database
+                   MainActivity.MyDatabase.myDao().addReport(report);
                    Toast.makeText(getActivity(), "Report aggiunto", Toast.LENGTH_SHORT).show();
 
-                   //Faccio media e controllo che sia entro i limiti prestabiliti
-
+                   //FACCIO MEDIA VALORI DI TUTTI I REPORT E CONTROLLO CHE NON SUPERINO I LIMITI
                    reports=MainActivity.MyDatabase.myDao().getReportsDesc(); //tutti i report
-
+                   //prendo i valori dalle sharedPreferences
                    Double minTemp, maxTemp, minFreq, maxFreq, minPeso, maxPeso;
                    int Days;
                    minTemp=Double.parseDouble(prioritySharedReference.getString("minTemp","0"));
@@ -224,12 +210,11 @@ public class AddReportFragment extends Fragment {
                    maxFreq=Double.parseDouble(prioritySharedReference.getString("maxFreq", "10000"));
                    minPeso=Double.parseDouble(prioritySharedReference.getString("minPeso", "0"));
                    maxPeso=Double.parseDouble(prioritySharedReference.getString("maxPeso", "10000"));
-
                    Days=prioritySharedReference.getInt("monitorDays", 3);
 
                    List<Report> nReports=getFirstNReports(reports, Days); //prendo i primi n report a seconda delle preferenze di monitoraggio
-                    //
-                   ArrayList<Double> media=faiMediaValori(nReports);
+                   ArrayList<Double> media=faiMediaValori(nReports); //faccio media dei valori del report
+                   //controllo che nessuno dei valori abbia superato l'intervallo, se priorità >2 lancia la notifica
                    if(media.get(0)>maxTemp){
                        if(prioritySharedReference.getInt("temperatura", 0)>2)
                        notificaMediaSuperata("temperatura", "alto", 1);
@@ -255,7 +240,6 @@ public class AddReportFragment extends Fragment {
                        notificaMediaSuperata("peso", "basso", 3);
                    }
 
-
                    //ritorno alla home
                    MainActivity.fragmentManager.popBackStackImmediate();
                }
@@ -269,7 +253,6 @@ public class AddReportFragment extends Fragment {
         NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(getContext().NOTIFICATION_SERVICE);
         NotificationChannel notificationChannel = new NotificationChannel(""+valore, "My Notifications", NotificationManager.IMPORTANCE_HIGH);
 
-        // Configure the notification channel.
         notificationChannel.setDescription("Channel description");
         notificationChannel.enableLights(true);
         notificationChannel.setLightColor(Color.RED);
@@ -281,7 +264,6 @@ public class AddReportFragment extends Fragment {
                 .setSmallIcon(R.drawable.notification_drawer)
                 .setContentTitle("Attenzione, media superata!")
                 .setContentText("Il valore medio di "+valore +" è troppo "+altobasso);
-
 
         notificationManager.notify(id, builderProva.build());
     }
@@ -301,8 +283,6 @@ public class AddReportFragment extends Fragment {
         media.add(mediaTemp);
         media.add(mediaFreq);
         media.add(mediaPeso);
-
-
         return media;
     }
 

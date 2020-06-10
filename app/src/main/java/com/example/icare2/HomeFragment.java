@@ -38,12 +38,11 @@ import java.util.List;
 public class HomeFragment extends Fragment {
     private FloatingActionButton newReport;
     private TextView ifvuototext;
-
-    //variabili
     private ListView listViewReport; //listview da legare all'id nel file xml
     private List<Report> reports; //lista di oggetti report
     private List<Report> last7Reports;
-   private ReportAdapter reportAdapter;
+    private List<Report> last30Reports;
+    private ReportAdapter reportAdapter;
 
 
     public HomeFragment() {
@@ -57,15 +56,12 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        Spinner filtroSpinner=view.findViewById(R.id.filtroSpinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.filtro, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        filtroSpinner.setAdapter(adapter);
 
-        //collego i buttons a quelli nel file xml
         newReport = view.findViewById(R.id.newreportbutton);
+        listViewReport = view.findViewById(R.id.reportlist);
+        ifvuototext = view.findViewById(R.id.ifvuototext);
 
-
+        //aggiungi report
         newReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,16 +72,21 @@ public class HomeFragment extends Fragment {
         });
 
 
-        listViewReport = view.findViewById(R.id.reportlist);
-        ifvuototext = view.findViewById(R.id.ifvuototext);
+
+        //carico i report e riempo la listview
+        reports = MainActivity.MyDatabase.myDao().getReportsDesc();
+        if (reports.size() == 0) {
+            ifvuototext.setText("Non è presente alcun report");
+        }
+        reportAdapter= new ReportAdapter(getContext(), reports);
+        listViewReport.setAdapter(reportAdapter);
 
 
-        //salvo tutti i report del database in una lista
-
-
-        //popolo la listview
-
-
+        //filtro report
+        Spinner filtroSpinner=view.findViewById(R.id.filtroSpinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.filtro, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        filtroSpinner.setAdapter(adapter);
 
         filtroSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -103,14 +104,13 @@ public class HomeFragment extends Fragment {
                         reports = MainActivity.MyDatabase.myDao().getReportsDesc();
                         if(reports.size()>7) {
                            last7Reports = reports.subList(0, 6);
-                            //reportAdapter.filterList(last7Reports);
                             reportAdapter.updateList(last7Reports);
                         }
                         break;
                     case 2:
                         reports = MainActivity.MyDatabase.myDao().getReportsDesc();
                         if(reports.size()>30) {
-                            List<Report> last30Reports = reports.subList(0,30);
+                            last30Reports = reports.subList(0,30);
                             reportAdapter.updateList(last30Reports);
                         }else{
                             reportAdapter.updateList(reports);
@@ -141,7 +141,7 @@ public class HomeFragment extends Fragment {
                         switch (item.getItemId()) {
                             case R.id.modify_option:
                                 if (reports.get(position).getNumero() > 1) {
-                                    //se il giorno ha più di un report apro un fragment con quei report e gli passo la posizione
+                                    //se il giorno ha più di un report apro un fragment con i report di quel giorno passando la posizione del report all'altro fragment
                                     DayReportsFragment dayReportsFragment = new DayReportsFragment();
                                     Bundle bundle = new Bundle();
                                     bundle.putInt("position", position);
@@ -159,16 +159,13 @@ public class HomeFragment extends Fragment {
                                     final EditText Peso = alertview.findViewById(R.id.Peso);
                                     Button modifica = alertview.findViewById(R.id.modifyalert);
                                     Button annulla = alertview.findViewById(R.id.cancelalert);
-
-                                    DecimalFormat intero = new DecimalFormat("####0");//approssimo a intero
                                     //setto i suoi campi con i valori del report cliccato
+                                    DecimalFormat intero = new DecimalFormat("####0");//approssimo a intero
                                     Temperatura.setText("" + reports.get(position).getTemperatura());
-                                    Battito.setText("" + intero.format(reports.get(position).getFrequenza()));
+                                    Battito.setText("" + intero.format(reports.get(position).getFrequenza())); //battito approssimato a intero
                                     Peso.setText("" + reports.get(position).getPeso());
-
-
-                                    alertbuilder.setView(alertview);
-                                    final AlertDialog dialog = alertbuilder.create();
+                                    alertbuilder.setView(alertview); //setto view
+                                    final AlertDialog dialog = alertbuilder.create(); //permette di fare show e dismiss
 
                                     //clicco modifica
                                     modifica.setOnClickListener(new View.OnClickListener() {
@@ -182,7 +179,6 @@ public class HomeFragment extends Fragment {
                                             reportTempo.setFrequenza((Double.parseDouble(Battito.getText().toString())));
                                             reportTempo.setPeso((Double.parseDouble(Peso.getText().toString())));
                                             reportTempo.setData(reports.get(position).getData());
-
 
                                             //aggiorno database
                                             MainActivity.MyDatabase.myDao().updateReport(reportTempo);
@@ -198,12 +194,11 @@ public class HomeFragment extends Fragment {
                                     annulla.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            dialog.dismiss();
-
+                                            dialog.dismiss(); //chiudo l'alert
                                         }
                                     });
 
-                                    dialog.show();
+                                    dialog.show(); //mostro il dialog
                                 }
                                 break;
                             case R.id.delete_option:
@@ -219,7 +214,6 @@ public class HomeFragment extends Fragment {
 
                                         MainActivity.MyDatabase.myDao().deleteReportsByDate(reports.get(position).getData()); //elimino report cliccato dal database
                                         reportAdapter.removeElementFromList(position); //rimuovo il report dalla listview
-
                                         dialog.dismiss();
                                         Toast.makeText(getContext(), "Report eliminato", Toast.LENGTH_SHORT).show();
 
@@ -229,13 +223,10 @@ public class HomeFragment extends Fragment {
 
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-
                                         dialog.dismiss();
                                     }
                                 });
-
                                 alert.show();
-
                                 break;
                         }
                         return false;
@@ -247,13 +238,11 @@ public class HomeFragment extends Fragment {
             }
         });
 
-
-        //reazione al click corto (modifica report)
+        //reazione al click corto
         listViewReport.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String nota=reports.get(position).getNota();
-
                 if (reports.get(position).getNumero() > 1) {
                     //se il giorno ha più di un report apro un fragment con quei report e gli passo la posizione
                     DayReportsFragment dayReportsFragment = new DayReportsFragment();
@@ -264,7 +253,7 @@ public class HomeFragment extends Fragment {
                             addToBackStack(null).commit(); //aggiungo al backstack
                 }else {
                     if (nota != null) {
-
+                        //mostro alert con la nota
                         AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
                         alert.setMessage(nota);
                         alert.show();

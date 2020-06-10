@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
 
-//FUNGE DA TABELLA
+//TABELLA
 @Entity(tableName = "Reports")
 public class Report {
 

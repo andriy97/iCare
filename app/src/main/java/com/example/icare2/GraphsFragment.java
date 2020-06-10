@@ -83,21 +83,18 @@ public class GraphsFragment extends Fragment {
         graficotemp= view.findViewById(R.id.graficotemp);
         graficofreq= view.findViewById(R.id.graficofreq);
         graficopeso= view.findViewById(R.id.graficopeso);
-        drawgraph(graficotemp, "Temperatura");
-        drawgraph(graficofreq, "Frequenza");
-        drawgraph(graficopeso, "Peso");
+        drawLineChart(graficotemp, "Temperatura");
+        drawLineChart(graficofreq, "Frequenza");
+        drawLineChart(graficopeso, "Peso");
 
         //grafico barchart
         graficoreport=view.findViewById(R.id.graficoreport);
         drawBarChart(graficoreport);
-
-
-
-
-
         return view;
     }
-    public void drawgraph (LineChart grafico, String titolo){
+
+
+    public void drawLineChart (LineChart grafico, String titolo){
 
         switch (titolo){
             case "Temperatura":
@@ -131,15 +128,9 @@ public class GraphsFragment extends Fragment {
                 lineDataSet= new LineDataSet(valoriY, "Peso");
                 break;
 
-
         }
-
-        //creo grafico
-
         grafico.setDragEnabled(true);
         grafico.setScaleEnabled(false);
-
-
 
         //metto come valori di x le date dei report e sposto i valori in basso
         xAxis = grafico.getXAxis();
@@ -149,9 +140,6 @@ public class GraphsFragment extends Fragment {
         //disabilito valori y sulla destra
         yAxis = grafico.getAxisRight();
         yAxis.setEnabled(false);
-
-
-
 
         lineDataSet.setFillAlpha(110);
         lineDataSet.setColor(Color.RED);
@@ -190,7 +178,6 @@ public class GraphsFragment extends Fragment {
         BarData data= new BarData(barDataSet);
         graficoreport.setData(data);
         graficoreport.setDescription(description);
-
     }
 }
 
